@@ -14,7 +14,6 @@ namespace WeiXinLib
 
         protected async override Task<object> GetTaskResult(ApiActionContext context)
         {
-
             var dataType = context.ApiActionDescriptor.Return.DataType;
             if (dataType.IsGenericType == false || dataType.GetGenericTypeDefinition() != weiXinApiResultType)
             {

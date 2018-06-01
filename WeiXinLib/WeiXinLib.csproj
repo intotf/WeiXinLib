@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Xml.Linq" />
@@ -49,16 +50,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute\WeiXinReturnFilterAttribute.cs" />
     <Compile Include="Attribute\WeiXinReturnAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\AppAccessTokenResult.cs" />
+    <Compile Include="Model\LineColor.cs" />
+    <Compile Include="Model\QrCodeConfig.cs" />
     <Compile Include="Model\WeiXinApiResult.cs" />
     <Compile Include="Model\WeiXinApiErrCode.cs" />
     <Compile Include="Instance.cs" />
-    <Compile Include="IOAuth.cs" />
+    <Compile Include="IWeiXinApi.cs" />
     <Compile Include="Model\AccessTokenResult.cs" />
     <Compile Include="Model\WeiXinApiException.cs" />
     <Compile Include="Model\UserInfoResult.cs" />
+    <Compile Include="Model\WXACodeConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,7 +31,7 @@ namespace WeiXinLib
     /// 微信接口返回实体
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class WeiXinApiResult<T> : IWeiXinApiResult where T : class,new()
+    public class WeiXinApiResult<T> : IWeiXinApiResult where T : class
     {
         /// <summary>
         /// 错识信息

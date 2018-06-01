@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,8 +20,9 @@ namespace WeiXinLib
         /// <summary>
         /// 初始化接口
         /// </summary>
-        private static readonly IOAuth client = HttpApiClient.Create<IOAuth>();
+        private static readonly IWeiXinApi client = HttpApiClient.Create<IWeiXinApi>();
 
+        #region 登录授权
         /// <summary>
         /// 通过code换取网页授权access_token
         /// </summary>
@@ -75,6 +79,66 @@ namespace WeiXinLib
                     return WeiXinApiResult<AccessTokenResult>.False(ex.HResult, ex.InnerException.Message);
                 });
             return data;
+        }
+        #endregion
+
+        //
+        public static async Task<WeiXinApiResult<AppAccessTokenResult>> GetAppAccessTokenAsync(string appid, string secret, string grant_type = "client_credential")
+        {
+            var data = await client.GetAppAccessToken(appid, secret, grant_type).Retry(3, TimeSpan.FromSeconds(1))
+               .WhenResult(item => item == null)
+               .Handle()
+               .WhenCatch<HttpRequestException>(ex =>
+               {
+                   return WeiXinApiResult<AppAccessTokenResult>.False(ex.HResult, ex.InnerException.Message);
+               });
+            return data;
+        }
+
+        /// <summary>
+        /// 获取小程序码
+        /// </summary>
+        /// <param name="access_token">第三方用户唯一凭证</param>
+        /// <param name="codeModel">二维码配置实体</param>
+        /// <returns></returns>
+        public static async Task<WeiXinApiResult<Stream>> GetAppWXAcodeAsync(string access_token, WXACodeConfig codeModel)
+        {
+            var data = await client.GetAppAcode(access_token, codeModel).Retry(3, TimeSpan.FromSeconds(1))
+               .WhenResult(item => item == null)
+               .Handle()
+               .WhenCatch<HttpRequestException>(ex =>
+               {
+                   return null;
+               });
+
+            if (data == null)
+            {
+                return WeiXinApiResult<Stream>.False(9999, "获取二维码失败");
+            }
+            return WeiXinApiResult<Stream>.True(data);
+        }
+
+        /// <summary>
+        /// 获取小程序码
+        /// </summary>
+        /// <param name="access_token">第三方用户唯一凭证</param>
+        /// <param name="codeConfig">二维码配置实体</param>
+        /// <returns></returns>
+        public static async Task<WeiXinApiResult<Stream>> GetAppQrcodeAsync(string access_token, QrCodeConfig codeConfig)
+        {
+            var data = await client.GetAppQrcode(access_token, codeConfig).Retry(3, TimeSpan.FromSeconds(1))
+               .WhenResult(item => item == null)
+               .Handle()
+               .WhenCatch<HttpRequestException>(ex =>
+               {
+                   return null;
+               });
+
+            if (data == null)
+            {
+                return WeiXinApiResult<Stream>.False(9999, "获取二维码失败");
+            }
+            return WeiXinApiResult<Stream>.True(data);
         }
     }
 }
