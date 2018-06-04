@@ -54,7 +54,7 @@ namespace WeiXinLib
         ITask<WeiXinApiResult<AccessTokenResult>> RefreshToken(string appid, string refresh_token, string grant_type);
         #endregion
 
-        #region 公众号方面接口s
+        #region 公众号方面接口
 
         /// <summary>
         /// 获取公众号的全局 access_token
